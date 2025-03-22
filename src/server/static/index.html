@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Logger</title>
+</head>
+<body>
+    <h1>WebSocket Logger</h1>
+    <form id="login-form">
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="log-container" style="display:none;">
+        <h2>Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const logContainer = document.getElementById('log-container');
+        const logDiv = document.getElementById('log');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            document.cookie = `rbsharedsecret=${password}; path=/`;
+
+            form.style.display = 'none';
+            logContainer.style.display = 'block';
+
+            const socket = new WebSocket('./wsp');
+
+            socket.addEventListener('open', function (event) {
+                console.log('Connected to WebSocket');
+            });
+
+            socket.addEventListener('message', function (event) {
+                const logEntry = document.createElement('div');
+                logEntry.textContent = event.data;
+                logDiv.appendChild(logEntry);
+            });
+
+            socket.addEventListener('error', function (event) {
+                console.error('WebSocket error:', event);
+            });
+
+            socket.addEventListener('close', function (event) {
+                console.log('WebSocket connection closed');
+            });
+        });
+    </script>
+</body>
+</html>

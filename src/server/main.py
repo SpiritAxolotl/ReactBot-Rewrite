@@ -74,10 +74,11 @@ wsock = FlaskWSocket(app)
 # payload_queue = []
 clients_map: dict[str, list[Server]] = defaultdict(list)
 
-
-@app.route("/doreact/<string(length=2):rbsharedsecret>", methods=["POST", "GET"])
+@app.route("/doreact/")
+@app.route("/doreact/<string:rbsharedsecret>", methods=["POST", "GET"])
 def doreact(rbsharedsecret: str):
-    # print(request.headers)
+    print(request.headers)
+    rbsharedsecret = rbsharedsecret[:10]
 
     printfc(clients_map, "#e0ae75")
     for _ws_client in clients_map[rbsharedsecret].copy():
