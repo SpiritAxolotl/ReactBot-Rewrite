@@ -1,0 +1,27 @@
+.logo.vanilla:hover {
+  filter: drop-shadow(0 0 2em #ffe21c);
+}
+:root {
+  background-color: #02ff13; /* WHY dont they use pure green :sob: */
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#reactbot {
+  max-height: 100vh;
+  width: 100vw;
+  position: absolute;
+  bottom: 0;
+  /*user-select: none;*/
+  object-fit: contain;
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+}
