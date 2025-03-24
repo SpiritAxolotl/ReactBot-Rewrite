@@ -1,17 +1,22 @@
-const tauri = window.__TAURI__;
+const tauri = __TAURI__;
 const core = tauri.core;
 const path = tauri.path;
 const fs = tauri.fs;
 
 const reactbot = document.querySelector(`#reactbot`);
+let appLocalDataDirPath = "";
+
+const getGrabBag = async (...paths) => {
+  return core.convertFileSrc(await path.join(appLocalDataDirPath, "GrabBag", ...paths));
+};
 
 const playRandomVideo = () => {
   
 };
 
 window.addEventListener("DOMContentLoaded", async () => {
-  const appLocalDataDirPath = await path.appLocalDataDir();
-  reactbot.src = core.convertFileSrc(await path.join(appLocalDataDirPath, "GrabBag", "0 breathing idle loop.mp4"));
+  appLocalDataDirPath = await path.appLocalDataDir();
+  reactbot.src = await getGrabBag("0 breathing idle loop.mp4");
   window.addEventListener("keypress", (e) => {
     e.preventDefault();
     console.log(`key pressed: ${e.key}`);
