@@ -13,7 +13,7 @@ body {
   height: 100vh;
 }
 
-#reactbot {
+.reactbot {
   max-height: 100vh;
   width: 100vw;
   position: absolute;
@@ -23,5 +23,16 @@ body {
   cursor: grab;
   &:active {
     cursor: grabbing;
+  }
+}
+
+#reactbot-player.playing ~ #reactbot-idle {
+  display: none;
+}
+
+#reactbot-player {
+  display: none;
+  &.playing {
+    display: block;
   }
 }
