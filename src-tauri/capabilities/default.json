@@ -11,7 +11,7 @@
     "fs:default",
     {
       "identifier": "fs:scope",
-      "allow": [{ "path": "$APPLOCALDATA/GrabBag/*.mp4" }]
+      "allow": [{ "path": "$APPLOCALDATA/GrabBag/*.mp4" }, { "path": "$APPLOCALDATA/GrabBag" }]
     }
   ]
 }
