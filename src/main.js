@@ -50,7 +50,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   grabBagIdlePath = grabBagVideoPaths.shift();
   reactbotIdle.src = await getGrabBagVideo(grabBagIdlePath);
   reactbotPlayer.addEventListener("ended", playIdleVideo);
-  reactbotPlayer.addEventListener("loadeddata", playPlayerVideo);
+  reactbotPlayer.addEventListener("canplaythrough", playPlayerVideo);
   window.addEventListener("keypress", (e) => {
     e.preventDefault();
     //console.log(`key pressed: ${e.key}`);
