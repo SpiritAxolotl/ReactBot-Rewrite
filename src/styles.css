@@ -26,13 +26,12 @@ body {
   }
 }
 
-#reactbot-player.playing ~ #reactbot-idle {
-  display: none;
-}
-
 #reactbot-player {
   display: none;
   &.playing {
     display: block;
+    & ~ #reactbot-idle {
+      display: none;
+    }
   }
 }
