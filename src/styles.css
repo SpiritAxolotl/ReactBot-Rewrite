@@ -13,17 +13,24 @@ body {
   height: 100vh;
 }
 
+#ghost {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  user-select: none;
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+}
+
 .reactbot {
   max-height: 100vh;
   width: 100vw;
   position: absolute;
   bottom: 0;
-  /*user-select: none;*/
   object-fit: contain;
-  cursor: grab;
-  &:active {
-    cursor: grabbing;
-  }
 }
 
 #reactbot-player {
