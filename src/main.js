@@ -2,6 +2,7 @@ const tauri = __TAURI__;
 const core = tauri.core;
 const path = tauri.path;
 const fs = tauri.fs;
+const register = tauri.globalShortcut.register;
 
 const reactbotIdle = document.querySelector(`#reactbot-idle`);
 const reactbotPlayer = document.querySelector(`#reactbot-player`);
@@ -13,17 +14,35 @@ const getGrabBagVideo = async (...paths) => {
   return core.convertFileSrc(await path.join(appLocalDataDirPath, "GrabBag", ...paths));
 };
 
+// const playRandomVideo = async () => {
+//   const rand = Math.floor(Math.random() * grabBagVideoPaths.length);
+//   console.log("Picked video index:", rand, "Path:", grabBagVideoPaths[rand]);
+//   try {
+//     //const blob = await fetch(await getGrabBagVideo(grabBagVideoPaths[rand])).then(a => a.blob());
+//     //reactbot.src = URL.createObjectURL(blob);
+//     reactbotPlayer.src = await getGrabBagVideo(grabBagVideoPaths[rand]);
+//     reactbotPlayer.type = 'video/mp4';
+//     reactbotPlayer.currentTime = 0.0;
+//     //reactbot.removeAttribute("loop");
+//     //reactbot.currentTime = 0.0;
+//     //reactbot.play();
+//   } catch (e) {
+//     console.error("ReactBot wasn't able to fetch the video resource! Here's the error:", e);
+//   }
+// };
+
 const playRandomVideo = async () => {
   const rand = Math.floor(Math.random() * grabBagVideoPaths.length);
-  console.log("Picked video index:", rand, "\nPath:", grabBagVideoPaths[rand]);
+  const fileName = grabBagVideoPaths[rand];
+  console.log("Picked video index:", rand, "Path:", fileName);
   try {
-    //const blob = await fetch(await getGrabBagVideo(grabBagVideoPaths[rand])).then(a => a.blob());
-    //reactbot.src = URL.createObjectURL(blob);
-    reactbotPlayer.src = await getGrabBagVideo(grabBagVideoPaths[rand]);
+    const fileBytes = await fs.readFile(
+      await path.join(appLocalDataDirPath, "GrabBag", fileName)
+    );
+    const blob = new Blob([new Uint8Array(fileBytes)], { type: "video/mp4" });
+    const blobUrl = URL.createObjectURL(blob);
+    reactbotPlayer.src = blobUrl;
     reactbotPlayer.currentTime = 0.0;
-    //reactbot.removeAttribute("loop");
-    //reactbot.currentTime = 0.0;
-    //reactbot.play();
   } catch (e) {
     console.error("ReactBot wasn't able to fetch the video resource! Here's the error:", e);
   }
@@ -45,15 +64,23 @@ window.addEventListener("DOMContentLoaded", async () => {
   appLocalDataDirPath = await path.appLocalDataDir();
   grabBagVideoPaths = await (async () => {
     const entries = await fs.readDir("GrabBag", { baseDir: fs.BaseDirectory.AppLocalData });
-    return entries.filter(e=>e.isFile).map(e=>e.name);
+    return entries
+      .filter(e => e.isFile)
+      .map(e => e.name)
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
   })();
   grabBagIdlePath = grabBagVideoPaths.shift();
-  reactbotIdle.src = await getGrabBagVideo(grabBagIdlePath);
+  console.log(grabBagIdlePath)
+  const fileBytesIdle = await fs.readFile(
+    await path.join(appLocalDataDirPath, "GrabBag", grabBagIdlePath)
+  );
+  const blobIdle = new Blob([new Uint8Array(fileBytesIdle)], { type: "video/mp4" });
+  const blobUrlIdle = URL.createObjectURL(blobIdle);
+  reactbotIdle.src = blobUrlIdle
   reactbotPlayer.addEventListener("ended", playIdleVideo);
   reactbotPlayer.addEventListener("canplaythrough", playPlayerVideo);
-  window.addEventListener("keypress", (e) => {
-    e.preventDefault();
-    //console.log(`key pressed: ${e.key}`);
-    if (e.key === "7" && !reactbotPlayer.classList.contains("playing")) playRandomVideo();
+  await register('F7', (event) => {
+    if (event.state === "Pressed" && !reactbotPlayer.classList.contains("playing")) playRandomVideo();
   });
 });
+

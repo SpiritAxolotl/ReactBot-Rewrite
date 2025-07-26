@@ -9,6 +9,9 @@
     "core:default",
     "opener:default",
     "fs:default",
+    "global-shortcut:allow-is-registered",
+    "global-shortcut:allow-register",
+    "global-shortcut:allow-unregister",
     {
       "identifier": "fs:scope",
       "allow": [{ "path": "$APPLOCALDATA/GrabBag/*.mp4" }, { "path": "$APPLOCALDATA/GrabBag" }]

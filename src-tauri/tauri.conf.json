@@ -16,10 +16,10 @@
       }
     ],
     "security": {
-      "csp": "img-src 'self' asset: http://asset.localhost",
+      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost; media-src 'self' asset: http://asset.localhost; script-src 'self';",
       "assetProtocol": {
         "enable": true,
-        "scope": ["$APPLOCALDATA/GrabBag/*"]
+        "scope": ["$APPLOCALDATA/GrabBag/**"]
       }
     }
   },
