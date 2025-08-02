@@ -42,9 +42,9 @@ const playIdleVideo = async () => {
 };
 
 window.addEventListener("DOMContentLoaded", async () => {
-  appLocalDataDirPath = await path.appLocalDataDir();
+  appLocalDataDirPath = await path.appDataDir();
   grabBagVideoPaths = await (async () => {
-    const entries = await fs.readDir("GrabBag", { baseDir: fs.BaseDirectory.AppLocalData });
+    const entries = await fs.readDir("GrabBag", { baseDir: fs.BaseDirectory.AppData });
     return entries
       .filter(e => e.isFile)
       .map(e => e.name)

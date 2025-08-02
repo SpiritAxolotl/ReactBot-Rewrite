@@ -13,7 +13,7 @@
     "global-shortcut:allow-register",
     {
       "identifier": "fs:scope",
-      "allow": [{ "path": "$APPLOCALDATA/GrabBag/*.mp4" }, { "path": "$APPLOCALDATA/GrabBag" }]
+      "allow": [{ "path": "$APPDATA/GrabBag/*.mp4" }, { "path": "$APPDATA/GrabBag" }]
     }
   ]
 }
