@@ -1,4 +1,4 @@
-name: Build Tauri AppImage
+name: Build ReactBot binaries & packages
 # For now, we're only building test binaries on Linux
 
 on:
@@ -19,6 +19,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Cache Node modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,11 +56,30 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Build Tauri AppImage
+      - name: Build dists
         run: npm run tauri build
 
-      - name: Archive Tauri AppImage
+      - name: Upload DEB package
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-app-image
-          path: src-tauri/target/release/bundle/
+          name: reactbot-deb
+          path: src-tauri/target/release/bundle/deb/*.deb
+
+      - name: Upload RPM package
+        uses: actions/upload-artifact@v4
+        with:
+          name: reactbot-rpm
+          path: src-tauri/target/release/bundle/rpm/*.rpm
+
+      - name: Upload AppImage package
+        uses: actions/upload-artifact@v4
+        with:
+          name: reactbot-appimage
+          path: src-tauri/target/release/bundle/appimage/*.AppImage
+
+          
+      # - name: Archive dists
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: tauri-dists
+      #     path: src-tauri/target/release/bundle/
