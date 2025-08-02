@@ -1,4 +1,4 @@
-name: Build Tauri App Image
+name: Build Tauri AppImage
 # For now, we're only building test binaries on Linux
 
 on:
@@ -31,15 +31,15 @@ jobs:
       - name: Install Tauri dependencies (Linux)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
+          sudo apt-get install -y libwebkit2gtk-4.0-dev build-essential curl wget libssl-dev libgtk-3-dev libayatana-appindicator3-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev libwebkit2gtk-4.1-dev
 
       - name: Install npm dependencies
         run: npm install
 
-      - name: Build Tauri app image
+      - name: Build Tauri AppImage
         run: npm run tauri build
 
-      - name: Archive Tauri app image
+      - name: Archive Tauri AppImage
         uses: actions/upload-artifact@v4
         with:
           name: tauri-app-image
